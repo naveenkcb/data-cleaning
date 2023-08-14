@@ -1,2 +1,2 @@
-# su23-cleaning-proj
-CS-513 Data Cleaning project
+# CS-513 Data Cleaning coursework
+- Data Cleaning project
