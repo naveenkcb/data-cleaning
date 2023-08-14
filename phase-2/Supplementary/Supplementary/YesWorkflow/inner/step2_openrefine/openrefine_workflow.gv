@@ -1,0 +1,69 @@
+
+/* Start of top-level graph */
+digraph Workflow {
+rankdir=TB
+
+/* Title for graph */
+fontname=Helvetica; fontsize=18; labelloc=t
+label=OpenRefine_cleaning_workflow
+
+/* Start of double cluster for drawing box around nodes in workflow */
+subgraph cluster_workflow_box_outer { label=""; color=black; penwidth=2
+subgraph cluster_workflow_box_inner { label=""; penwidth=0
+
+/* Style for nodes representing atomic programs in workflow */
+node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing atomic programs in workflow */
+Import_to_OpenRefine [shape=record rankdir=LR label="{<f0> Import_to_OpenRefine |<f1> Import winemag_step1_python.csv into OpenRefine and start cleaning process}"];
+add_columns [shape=record rankdir=LR label="{<f0> add_columns |<f1> Addition of the ID & currency fields(USD) & populating them}"];
+remove_whitespaces [shape=record rankdir=LR label="{<f0> remove_whitespaces |<f1> Trim all the leading and trailing whitespaces , Collapse consecutive whitespaces}"];
+column_conversions [shape=record rankdir=LR label="{<f0> column_conversions |<f1> Convert columns with numbers to NUMERIC; column names to titlecase}"];
+null_countries_replacement [shape=record rankdir=LR label="{<f0> null_countries_replacement |<f1> Populate NULL countries values based on the winery location}"];
+
+/* Style for nodes representing non-parameter data channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes for non-parameter data channels in workflow */
+"winemag_step2_openrefine.csv" [shape=record rankdir=LR label="{<f0> winemag_step2_openrefine.csv |<f1> file\://initialdata/winemag_step1_python.csv}"];
+Import_winemag_step1_python [shape=record rankdir=LR label="{<f0> Import_winemag_step1_python |<f1> file\://initialdata/winemag_step1_python.csv}"];
+
+/* Style for nodes representing parameter channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing parameter channels in workflow */
+
+/* Edges representing connections between programs and channels */
+Import_winemag_step1_python -> Import_to_OpenRefine
+add_columns -> "winemag_step2_openrefine.csv"
+Import_to_OpenRefine -> add_columns
+remove_whitespaces -> "winemag_step2_openrefine.csv"
+Import_to_OpenRefine -> remove_whitespaces
+column_conversions -> "winemag_step2_openrefine.csv"
+Import_to_OpenRefine -> column_conversions
+null_countries_replacement -> "winemag_step2_openrefine.csv"
+Import_to_OpenRefine -> null_countries_replacement
+
+/* End of double cluster for drawing box around nodes in workflow */
+}}
+
+/* Style for nodes representing workflow input ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow input ports */
+Import_winemag_step1_python_input_port [label=""]
+
+/* Style for nodes representing workflow output ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow output ports */
+"winemag_step2_openrefine.csv_output_port" [label=""]
+
+/* Edges from input ports to channels */
+Import_winemag_step1_python_input_port -> Import_winemag_step1_python
+
+/* Edges from channels to output ports */
+"winemag_step2_openrefine.csv" -> "winemag_step2_openrefine.csv_output_port"
+
+/* End of top-level graph */
+}

@@ -1,0 +1,29 @@
+# @begin python_cleaning_workflow  @desc Workflow for python cleaning step
+# @in Import_Raw_Winemag_CSV  @uri file://initialdata/winemag-data-130k-v2.csv
+# @out winemag_step1_python.csv  @uri file://initialdata/winemag_step1_python.csv
+
+#     @begin Import_to_notebook  @desc Import winemag-data-130k-v2.csv as dataframe into jupter notebook and clean using pandas
+#     @in Import_Raw_Winemag_CSV
+#     @end Import_to_notebook
+
+#     @begin special_chars  @desc Clean special characters by column names
+#     @in Import_to_notebook
+#     @out winemag_step1_python.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end special_chars
+
+#     @begin accent_chars  @desc Clean accented characters to English letters or spaces
+#     @in Import_to_notebook
+#     @out winemag_step1_python.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end accent_chars
+
+#     @begin null_price_replacement  @desc Populate the NULL prices with mean price
+#     @in Import_to_notebook
+#     @out winemag_step1_python.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end null_price_replacement
+
+#     @begin null_country_replacement  @desc Populate the NULL country values based on winery location
+#     @in Import_to_notebook
+#     @out winemag_step1_python.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end null_country_replacement
+
+# @end python_cleaning_workflow

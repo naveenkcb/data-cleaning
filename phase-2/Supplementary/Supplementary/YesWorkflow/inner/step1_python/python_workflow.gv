@@ -1,0 +1,69 @@
+
+/* Start of top-level graph */
+digraph Workflow {
+rankdir=TB
+
+/* Title for graph */
+fontname=Helvetica; fontsize=18; labelloc=t
+label=python_cleaning_workflow
+
+/* Start of double cluster for drawing box around nodes in workflow */
+subgraph cluster_workflow_box_outer { label=""; color=black; penwidth=2
+subgraph cluster_workflow_box_inner { label=""; penwidth=0
+
+/* Style for nodes representing atomic programs in workflow */
+node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing atomic programs in workflow */
+Import_to_notebook [shape=record rankdir=LR label="{<f0> Import_to_notebook |<f1> Import winemag-data-130k-v2.csv as dataframe into jupter notebook and clean using pandas}"];
+special_chars [shape=record rankdir=LR label="{<f0> special_chars |<f1> Clean special characters by column names}"];
+accent_chars [shape=record rankdir=LR label="{<f0> accent_chars |<f1> Clean accented characters to English letters or spaces}"];
+null_price_replacement [shape=record rankdir=LR label="{<f0> null_price_replacement |<f1> Populate the NULL prices with mean price}"];
+null_country_replacement [shape=record rankdir=LR label="{<f0> null_country_replacement |<f1> Populate the NULL country values based on winery location}"];
+
+/* Style for nodes representing non-parameter data channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes for non-parameter data channels in workflow */
+"winemag_step1_python.csv" [shape=record rankdir=LR label="{<f0> winemag_step1_python.csv |<f1> file\://initialdata/winemag_step1_python.csv}"];
+Import_Raw_Winemag_CSV [shape=record rankdir=LR label="{<f0> Import_Raw_Winemag_CSV |<f1> file\://initialdata/winemag-data-130k-v2.csv}"];
+
+/* Style for nodes representing parameter channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing parameter channels in workflow */
+
+/* Edges representing connections between programs and channels */
+Import_Raw_Winemag_CSV -> Import_to_notebook
+special_chars -> "winemag_step1_python.csv"
+Import_to_notebook -> special_chars
+accent_chars -> "winemag_step1_python.csv"
+Import_to_notebook -> accent_chars
+null_price_replacement -> "winemag_step1_python.csv"
+Import_to_notebook -> null_price_replacement
+null_country_replacement -> "winemag_step1_python.csv"
+Import_to_notebook -> null_country_replacement
+
+/* End of double cluster for drawing box around nodes in workflow */
+}}
+
+/* Style for nodes representing workflow input ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow input ports */
+Import_Raw_Winemag_CSV_input_port [label=""]
+
+/* Style for nodes representing workflow output ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow output ports */
+"winemag_step1_python.csv_output_port" [label=""]
+
+/* Edges from input ports to channels */
+Import_Raw_Winemag_CSV_input_port -> Import_Raw_Winemag_CSV
+
+/* Edges from channels to output ports */
+"winemag_step1_python.csv" -> "winemag_step1_python.csv_output_port"
+
+/* End of top-level graph */
+}

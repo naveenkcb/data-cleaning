@@ -1,0 +1,64 @@
+# @begin The_Wranglers_(Team28)_Winemag  @desc Workflow for cleaning Winemag dataset
+# @in Import_Raw_Winemag_CSV  @uri file://initialdata/winemag-data-130k-v2.csv
+# @out winemag_cleaned.csv
+# @out winemag_dirty.csv
+
+#     @begin WinemagDirty.db  @desc Define queries to report constraints and compare to WinemagClean.db
+#     @in Import_Raw_Winemag_CSV  @uri file://initialdata/winemag-data-130k-v2.csv
+#     @out Taster_table_(dirty)  @uri mysql://WinemagDirty.db/Taster
+#     @out Wine_table_(dirty)  @uri mysql://WinemagDirty.db/Wine
+#     @out Region_table_(dirty)  @uri mysql://WinemagDirty.db/Region
+#     @out Compare_Databases
+#     @end Load_Raw_Dataset_to_MySQL
+
+#     @begin Taster_(dirty)  @desc taster_id\ntaster_name\ntaster_twitter_handle
+#     @in Taster_table_(dirty)
+#     @end Taster_(dirty)
+
+#     @begin Wine_(dirty)  @desc wid\ntitle\ndescription\ndesignation\ntaster_id\nreg_id\ncurrency\nprice\nvariety\npoints
+#     @in Wine_table_(dirty)
+#     @end WineDirty
+
+#     @begin Region_(dirty)  @desc reg_id\ncountry\nregion_1\nregion_2\nprovince
+#     @in Region_table_(dirty)
+#     @end RegionDirty
+
+#     @begin Raw_Python_Cleaning  @desc Use Python to clean winemag-data-130k-v2.csv
+#     @in Import_Raw_Winemag_CSV  @uri file://initialdata/winemag-data-130k-v2.csv
+#     @out winemag_step1_python.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end Raw_Python_Cleaning
+
+#     @begin OpenRefine_Cleaning  @desc Use OpenRefine to clean winemag_step1_python.csv
+#     @in  winemag_step1_python.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @out winemag_step2_openrefine.csv  @uri file://initialdata/winemag_step2_openrefine.csv
+#     @end OpenRefine_Cleaning
+
+#     @begin SQL_Constraints_Validations_and_Data_Comparison  @desc Use MySQL to check winemag_step2_openrefine.csv
+#     @in  winemag_step2_openrefine.csv  @uri file://initialdata/winemag_step2_openrefine.csv
+#     @out winemag_cleaned.csv  @uri file://output/winemag_cleaned.csv
+#     @end SQL_Cleaning&Constraints
+
+#     @begin WinemagClean.db  @desc Output of tables from SQL cleaning
+#     @in SQL_Constraints_Validations_and_Data_Comparison  @uri file://output/winemag_cleaned.csv
+#     @out Compare_Databases
+#     @out Taster_table  @uri mysql://Winemag.db/Taster
+#     @out Wine_table  @uri mysql://Winemag.db/Wine
+#     @out Region_table  @uri mysql://Winemag.db/Region
+#     @end tables
+
+#     @begin Taster  @desc taster_id\ntaster_name\ntaster_twitter_handle
+#     @in Taster_table
+#     @end Taster
+
+#     @begin Wine  @desc wid\ntitle\ndescription\ndesignation\ntaster_id\nreg_id\ncurrency\nprice\nvariety\npoints
+#     @in Wine_table
+#     @end Wine
+
+#     @begin Region  @desc reg_id\ncountry\nregion_1\nregion_2\nprovince
+#     @in Region_table
+#     @end Region
+
+#     @begin Compare_Databases  @desc Compare WinemagDirty.db with Winemag.db
+#     @end Compare_Databases
+
+# @end The_Wranglers_(Team28)_Winemag

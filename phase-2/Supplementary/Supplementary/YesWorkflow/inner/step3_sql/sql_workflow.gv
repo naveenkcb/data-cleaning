@@ -1,0 +1,66 @@
+
+/* Start of top-level graph */
+digraph Workflow {
+rankdir=TB
+
+/* Title for graph */
+fontname=Helvetica; fontsize=18; labelloc=t
+label=SQL_constraints_workflow
+
+/* Start of double cluster for drawing box around nodes in workflow */
+subgraph cluster_workflow_box_outer { label=""; color=black; penwidth=2
+subgraph cluster_workflow_box_inner { label=""; penwidth=0
+
+/* Style for nodes representing atomic programs in workflow */
+node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing atomic programs in workflow */
+Import_to_mySQL [shape=record rankdir=LR label="{<f0> Import_to_mySQL |<f1> Import winemag_step2_openrefine.csv into MySQL\nCreate a database and populate with the cleaned csv file from OpenRefine step}"];
+create_tables [shape=record rankdir=LR label="{<f0> create_tables |<f1> Create three tables for ERD\:\nTaster\nWine\nDirty}"];
+check_ic_violations [shape=record rankdir=LR label="{<f0> check_ic_violations |<f1> Check Integrity Constraint violations}"];
+define_fd [shape=record rankdir=LR label="{<f0> define_fd |<f1> Define functional dependencies on primary keys}"];
+"WinemagClean.db" [shape=record rankdir=LR label="{<f0> WinemagClean.db |<f1> Output of tables from SQL cleaning}"];
+
+/* Style for nodes representing non-parameter data channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes for non-parameter data channels in workflow */
+Import_winemag_step2_openrefine [shape=record rankdir=LR label="{<f0> Import_winemag_step2_openrefine |<f1> file\://initialdata/winemag_step2_openrefine.csv}"];
+
+/* Style for nodes representing parameter channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing parameter channels in workflow */
+
+/* Edges representing connections between programs and channels */
+Import_winemag_step2_openrefine -> Import_to_mySQL
+Import_to_mySQL -> create_tables
+check_ic_violations -> "WinemagClean.db"
+create_tables -> check_ic_violations
+define_fd -> "WinemagClean.db"
+create_tables -> define_fd
+"WinemagClean.db" -> Taster_table
+"WinemagClean.db" -> Wine_table
+"WinemagClean.db" -> Region_table
+
+/* End of double cluster for drawing box around nodes in workflow */
+}}
+
+/* Style for nodes representing workflow input ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow input ports */
+Import_winemag_step2_openrefine_input_port [label=""]
+
+/* Style for nodes representing workflow output ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow output ports */
+
+/* Edges from input ports to channels */
+Import_winemag_step2_openrefine_input_port -> Import_winemag_step2_openrefine
+
+/* Edges from channels to output ports */
+
+/* End of top-level graph */
+}

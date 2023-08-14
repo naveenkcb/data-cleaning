@@ -1,0 +1,30 @@
+# @begin SQL_constraints_workflow  @desc Workflow for checking integregy contraints step
+# @in Import_winemag_step2_openrefine  @uri file://initialdata/winemag_step2_openrefine.csv
+# @out winemag_clean.csv  @uri file://initialdata/winemag_clean.csv
+
+#     @begin Import_to_mySQL  @desc Import winemag_step2_openrefine.csv into MySQL\nCreate a database and populate with the cleaned csv file from OpenRefine step
+#     @in Import_winemag_step2_openrefine
+#     @end Import_to_mySQL
+
+#     @begin create_tables  @desc Create three tables for ERD:\nTaster\nWine\nDirty
+#     @in Import_to_mySQL
+#     @end create_tables
+
+#     @begin check_ic_violations  @desc Check Integrity Constraint violations
+#     @in create_tables
+#     @out WinemagClean.db
+#     @end check_ic_violations
+
+#     @begin define_fd  @desc Define functional dependencies on primary keys
+#     @in create_tables
+#     @out WinemagClean.db
+#     @end define_fd
+
+#     @begin WinemagClean.db  @desc Output of tables from SQL cleaning
+#     @in check_ic_violations  @uri file://output/winemag_cleaned.csv
+#     @out Taster_table  @uri mysql://Winemag.db/Taster
+#     @out Wine_table  @uri mysql://Winemag.db/Wine
+#     @out Region_table  @uri mysql://Winemag.db/Region
+#     @end tables
+
+# @end python_cleaning_workflow

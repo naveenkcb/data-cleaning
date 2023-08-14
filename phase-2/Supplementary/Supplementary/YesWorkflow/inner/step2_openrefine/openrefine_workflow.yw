@@ -1,0 +1,29 @@
+# @begin OpenRefine_cleaning_workflow  @desc Workflow for python cleaning step
+# @in Import_winemag_step1_python  @uri file://initialdata/winemag_step1_python.csv
+# @out winemag_step2_openrefine.csv  @uri file://initialdata/winemag_step1_python.csv
+
+#     @begin Import_to_OpenRefine  @desc Import winemag_step1_python.csv into OpenRefine and start cleaning process
+#     @in Import_winemag_step1_python
+#     @end Import_to_notebook
+
+#     @begin add_columns  @desc Addition of the ID & currency fields(USD) & populating them
+#     @in Import_to_OpenRefine
+#     @out winemag_step2_openrefine.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end add_columns
+
+#     @begin remove_whitespaces  @desc Trim all the leading and trailing whitespaces , Collapse consecutive whitespaces
+#     @in Import_to_OpenRefine
+#     @out winemag_step2_openrefine.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end remove_whitespaces
+
+#     @begin column_conversions  @desc Convert columns with numbers to NUMERIC; column names to titlecase
+#     @in Import_to_OpenRefine
+#     @out winemag_step2_openrefine.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end column_conversions
+
+#     @begin null_countries_replacement  @desc Populate NULL countries values based on the winery location
+#     @in Import_to_OpenRefine
+#     @out winemag_step2_openrefine.csv  @uri file://initialdata/winemag_step1_python.csv
+#     @end null_countries_replacement
+
+# @end openrefine_cleaning_workflow

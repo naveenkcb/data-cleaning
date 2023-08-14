@@ -1,0 +1,97 @@
+
+/* Start of top-level graph */
+digraph Workflow {
+rankdir=TB
+
+/* Title for graph */
+fontname=Helvetica; fontsize=18; labelloc=t
+label="The_Wranglers_(Team28)_Winemag"
+
+/* Start of double cluster for drawing box around nodes in workflow */
+subgraph cluster_workflow_box_outer { label=""; color=black; penwidth=2
+subgraph cluster_workflow_box_inner { label=""; penwidth=0
+
+/* Style for nodes representing atomic programs in workflow */
+node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing atomic programs in workflow */
+"WinemagDirty.db" [shape=record rankdir=LR label="{<f0> WinemagDirty.db |<f1> Define queries to report constraints and compare to WinemagClean.db}"];
+"Taster_(dirty)" [shape=record rankdir=LR label="{<f0> Taster_(dirty) |<f1> taster_id\ntaster_name\ntaster_twitter_handle}"];
+"Wine_(dirty)" [shape=record rankdir=LR label="{<f0> Wine_(dirty) |<f1> wid\ntitle\ndescription\ndesignation\ntaster_id\nreg_id\ncurrency\nprice\nvariety\npoints}"];
+"Region_(dirty)" [shape=record rankdir=LR label="{<f0> Region_(dirty) |<f1> reg_id\ncountry\nregion_1\nregion_2\nprovince}"];
+Raw_Python_Cleaning [shape=record rankdir=LR label="{<f0> Raw_Python_Cleaning |<f1> Use Python to clean winemag-data-130k-v2.csv}"];
+OpenRefine_Cleaning [shape=record rankdir=LR label="{<f0> OpenRefine_Cleaning |<f1> Use OpenRefine to clean winemag_step1_python.csv}"];
+SQL_Constraints_Validations_and_Data_Comparison [shape=record rankdir=LR label="{<f0> SQL_Constraints_Validations_and_Data_Comparison |<f1> Use MySQL to check winemag_step2_openrefine.csv}"];
+"WinemagClean.db" [shape=record rankdir=LR label="{<f0> WinemagClean.db |<f1> Output of tables from SQL cleaning}"];
+Taster [shape=record rankdir=LR label="{<f0> Taster |<f1> taster_id\ntaster_name\ntaster_twitter_handle}"];
+Wine [shape=record rankdir=LR label="{<f0> Wine |<f1> wid\ntitle\ndescription\ndesignation\ntaster_id\nreg_id\ncurrency\nprice\nvariety\npoints}"];
+Region [shape=record rankdir=LR label="{<f0> Region |<f1> reg_id\ncountry\nregion_1\nregion_2\nprovince}"];
+Compare_Databases [shape=record rankdir=LR label="{<f0> Compare_Databases |<f1> Compare WinemagDirty.db with Winemag.db}"];
+
+/* Style for nodes representing non-parameter data channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes for non-parameter data channels in workflow */
+"winemag_cleaned.csv" [shape=record rankdir=LR label="{<f0> winemag_cleaned.csv |<f1> file\://output/winemag_cleaned.csv}"];
+Import_Raw_Winemag_CSV [shape=record rankdir=LR label="{<f0> Import_Raw_Winemag_CSV |<f1> file\://initialdata/winemag-data-130k-v2.csv}"];
+"Taster_table_(dirty)" [shape=record rankdir=LR label="{<f0> Taster_table_(dirty) |<f1> mysql\://WinemagDirty.db/Taster}"];
+"Wine_table_(dirty)" [shape=record rankdir=LR label="{<f0> Wine_table_(dirty) |<f1> mysql\://WinemagDirty.db/Wine}"];
+"Region_table_(dirty)" [shape=record rankdir=LR label="{<f0> Region_table_(dirty) |<f1> mysql\://WinemagDirty.db/Region}"];
+"winemag_step1_python.csv" [shape=record rankdir=LR label="{<f0> winemag_step1_python.csv |<f1> file\://initialdata/winemag_step1_python.csv}"];
+"winemag_step2_openrefine.csv" [shape=record rankdir=LR label="{<f0> winemag_step2_openrefine.csv |<f1> file\://initialdata/winemag_step2_openrefine.csv}"];
+Taster_table [shape=record rankdir=LR label="{<f0> Taster_table |<f1> mysql\://Winemag.db/Taster}"];
+Wine_table [shape=record rankdir=LR label="{<f0> Wine_table |<f1> mysql\://Winemag.db/Wine}"];
+Region_table [shape=record rankdir=LR label="{<f0> Region_table |<f1> mysql\://Winemag.db/Region}"];
+
+/* Style for nodes representing parameter channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing parameter channels in workflow */
+
+/* Edges representing connections between programs and channels */
+"WinemagDirty.db" -> "Taster_table_(dirty)"
+"WinemagDirty.db" -> "Wine_table_(dirty)"
+"WinemagDirty.db" -> "Region_table_(dirty)"
+"WinemagDirty.db" -> Compare_Databases
+Import_Raw_Winemag_CSV -> "WinemagDirty.db"
+"Taster_table_(dirty)" -> "Taster_(dirty)"
+"Wine_table_(dirty)" -> "Wine_(dirty)"
+"Region_table_(dirty)" -> "Region_(dirty)"
+Raw_Python_Cleaning -> "winemag_step1_python.csv"
+Import_Raw_Winemag_CSV -> Raw_Python_Cleaning
+OpenRefine_Cleaning -> "winemag_step2_openrefine.csv"
+"winemag_step1_python.csv" -> OpenRefine_Cleaning
+SQL_Constraints_Validations_and_Data_Comparison -> "winemag_cleaned.csv"
+"winemag_step2_openrefine.csv" -> SQL_Constraints_Validations_and_Data_Comparison
+"WinemagClean.db" -> Compare_Databases
+"WinemagClean.db" -> Taster_table
+"WinemagClean.db" -> Wine_table
+"WinemagClean.db" -> Region_table
+SQL_Constraints_Validations_and_Data_Comparison -> "WinemagClean.db"
+Taster_table -> Taster
+Wine_table -> Wine
+Region_table -> Region
+
+/* End of double cluster for drawing box around nodes in workflow */
+}}
+
+/* Style for nodes representing workflow input ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow input ports */
+Import_Raw_Winemag_CSV_input_port [label=""]
+
+/* Style for nodes representing workflow output ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow output ports */
+"winemag_cleaned.csv_output_port" [label=""]
+
+/* Edges from input ports to channels */
+Import_Raw_Winemag_CSV_input_port -> Import_Raw_Winemag_CSV
+
+/* Edges from channels to output ports */
+"winemag_cleaned.csv" -> "winemag_cleaned.csv_output_port"
+
+/* End of top-level graph */
+}
